@@ -104,6 +104,9 @@ func (c *RaftConfig) UnmarshalJSON(b []byte) error {
 }
 
 type MysqlConfig struct {
+	// mysql version judge
+	Version bool `json:"version-smaller-5.7"`
+
 	// mysql admin user
 	Admin string `json:"admin"`
 

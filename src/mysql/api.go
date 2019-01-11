@@ -337,13 +337,18 @@ func (m *Mysql) EnableSemiSyncMaster() error {
 	return m.replHandler.EnableSemiSyncMaster(db)
 }
 
+//TODO Judge version. MySQL 5.6 does not have variable "rpl_semi_sync_master_wait_for_slave_count"
 // SetSemiWaitSlaveCount used to set rpl_semi_sync_master_wait_for_slave_count
 func (m *Mysql) SetSemiWaitSlaveCount(count int) error {
-	db, err := m.getDB()
-	if err != nil {
-		return err
+	if !m.conf.Version {
+		db, err := m.getDB()
+		if err != nil {
+			return err
+		}
+		return m.replHandler.SetSemiWaitSlaveCount(db, count)
 	}
-	return m.replHandler.SetSemiWaitSlaveCount(db, count)
+
+	return nil
 }
 
 // DisableSemiSyncMaster used to disable the semi-sync from master.
